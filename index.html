@@ -59,7 +59,7 @@
       </div>
       <details class="chatgpt-box" id="chatgpt-box">
         <summary>ChatGPT連携（手動でコピー・貼り付け）</summary>
-        <p class="hint">①条件を入力してプロンプト作成 → ②コピー → ③対応リンクでアプリを開き、自分で貼り付け・送信 → ④回答をこちらへ貼り付け。APIや自動送信は使いません。</p>
+        <p class="hint">①条件を入力してプロンプト作成 → ②コピー → ③ホーム画面からアプリを開き、自分で貼り付け・送信 → ④回答をこちらへ貼り付け。APIや自動送信は使いません。</p>
         <p class="hint">キャラクター・話題は「話題を選ぶ」の入力を使用します。個人情報や他人の非公開情報を含めないでください。</p>
         <label class="field" for="gpt-notes">補足情報（事実・伝えたいこと）</label>
         <textarea id="gpt-notes" class="compact" maxlength="2000" placeholder="例：今日はスキルを1段階育成。次の目標を短く書きたい"></textarea>
@@ -77,13 +77,16 @@
           <button type="button" id="gpt-copy" class="wide" disabled>プロンプトをコピー</button>
           <label id="gpt-manual-copy-box" class="check" style="margin-top:12px" hidden><input type="checkbox" id="gpt-manual-copy"><span>プロンプトを手動でコピーしました</span></label>
         </div>
-        <p class="hint" id="gpt-launch-help">先にプロンプトをコピーすると、起動ボタンが使えます。まず対応リンクを試し、Chromeに留まる場合は「アプリを指定して開く」をタップしてください。</p>
-        <a id="gpt-open" class="launch-link primary" href="https://chatgpt.com/" aria-disabled="true" tabindex="-1" rel="noreferrer" aria-describedby="gpt-launch-help">ChatGPTを開く（対応リンク） ↗</a>
-        <a id="gpt-open-app" class="launch-link" href="intent://chatgpt.com/#Intent;scheme=https;package=com.openai.chatgpt;S.browser_fallback_url=https%3A%2F%2Fchatgpt.com%2F;end" aria-disabled="true" tabindex="-1" rel="noreferrer" aria-describedby="gpt-app-help">ChatGPTアプリを指定して開く</a>
-        <p class="hint" id="gpt-app-help">Android Chrome用。公式アプリが未インストール・起動不可の場合はWeb版へ移ることがあります。起動できない場合は下のWeb版を使ってください。</p>
+        <p class="hint" id="gpt-launch-help">コピー後、ホーム画面の公式ChatGPTアイコンからアプリを開いてください。アプリからChromeを開く確認が出る症状を避けるため、アプリ起動用のリンクは使用しません。</p>
+        <button type="button" id="gpt-open" class="launch-link primary wide" disabled aria-disabled="true" aria-expanded="false" aria-controls="gpt-manual-launch-guide" aria-describedby="gpt-launch-help">アプリを手動で開く方法</button>
+        <div id="gpt-manual-launch-guide" class="notice" tabindex="-1" hidden>
+          <strong>コピーしたプロンプトをアプリで使う</strong>
+          <ol><li>Androidのホーム画面に戻ります。</li><li>公式ChatGPTアプリのアイコンをタップします。</li><li>入力欄に自分で貼り付け、内容を確認して送信します。</li><li>回答をコピーし、アプリ切り替えでChromeのNIKKE NOTEに戻って貼り付けます。</li></ol>
+          <p class="hint">この案内を開くだけではアプリもChromeも起動しません。アプリを直接開いた場合にもChromeへの確認が出るなら、アプリ・Android側の処理の可能性があり、このWebアプリからは制御できません。</p>
+        </div>
         <a id="gpt-open-web" class="launch-link" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" aria-disabled="true" tabindex="-1">予備：ブラウザ版ChatGPTを開く ↗</a>
-        <p class="hint">起動先はAndroidの「対応リンクを開く」やChrome・vivoの設定に依存し、アプリ起動は保証できません。Web版リンクまでアプリに切り替わる場合は、リンクを長押しして新しいタブで開いてください。</p>
-        <p class="hint">ChatGPTは別のサービスです。開くのはトップページだけで、プロンプトや画像は渡しません。貼り付け・送信とログインはChatGPT上で自分で行ってください。</p>
+        <p class="hint">Web版の予備ボタンもOSの設定でアプリに切り替わる場合があります。その場合はリンクを長押ししてChromeの新しいタブで開いてください。</p>
+        <p class="hint">ChatGPTは別のサービスです。プロンプトや画像の自動入力・自動送信、アプリ起動の自動判定は行いません。貼り付け・送信とログインは自分で行ってください。</p>
         <label class="field" for="gpt-answer">ChatGPTの回答を貼り付ける</label>
         <textarea id="gpt-answer" maxlength="10000" placeholder="使いたい文章を手動でコピーし、ここへ貼り付け"></textarea>
         <button type="button" id="gpt-apply" class="wide" disabled>本文に反映</button>
@@ -158,10 +161,15 @@ function templateText() {
 // ChatGPT assistance only prepares local text. Never sends data to ChatGPT.
 let gptReadyToOpen = false;
 let gptCopyRevision = 0;
-const gptLaunchIds = ['gpt-open', 'gpt-open-app', 'gpt-open-web'];
+const gptLaunchIds = ['gpt-open', 'gpt-open-web'];
 const gptTones = {natural:'自然でシンプル', polite:'丁寧で落ち着いた感じ', friendly:'親しみやすく、なれなれしすぎない'};
 function setGptLaunchReady(ready) {
   gptReadyToOpen = ready;
+  $('gpt-open').disabled = !ready;
+  if (!ready) {
+    $('gpt-manual-launch-guide').hidden = true;
+    $('gpt-open').setAttribute('aria-expanded', 'false');
+  }
   for (const id of gptLaunchIds) {
     $(id).setAttribute('aria-disabled', String(!ready));
     $(id).tabIndex = ready ? 0 : -1;
@@ -214,7 +222,7 @@ async function copyGptPrompt() {
     await navigator.clipboard.writeText($('gpt-prompt').value);
     if (revision !== gptCopyRevision) return;
     setGptLaunchReady(true);
-    $('gpt-status').textContent = 'プロンプトをコピーしました。次に対応リンク、またはアプリを指定するボタンをタップし、自分で貼り付け・送信してください。';
+    $('gpt-status').textContent = 'プロンプトをコピーしました。ホーム画面から公式ChatGPTアプリを開き、自分で貼り付け・送信してください。「アプリを手動で開く方法」で手順を確認できます。';
   } catch {
     if (revision !== gptCopyRevision) return;
     $('gpt-manual-copy-box').hidden = false;
@@ -415,19 +423,21 @@ $('gpt-manual-copy').addEventListener('change', () => {
   ++gptCopyRevision;
   setGptLaunchReady(Boolean($('gpt-prompt').value) && $('gpt-manual-copy').checked);
 });
-// Native anchors keep Android link/intent handling inside the user's tap.
-// No timer, asynchronous redirect, installed-app detection, or automatic paste.
+// The app path is local guidance only; only the explicit web backup can navigate.
+// Do not add unverified schemes, activities, automatic fallback, or lifecycle redirects.
 for (const id of gptLaunchIds) $(id).addEventListener('click', event => {
   if (!gptReadyToOpen) {
     event.preventDefault();
     $('gpt-status').textContent = '先にプロンプトをコピーしてください。コピーできない場合は手動コピーを使えます。'; return;
   }
-  const messages = {
-    'gpt-open':'対応リンクでChatGPTを開きます。Chromeに留まる場合は、戻って「ChatGPTアプリを指定して開く」を試してください。',
-    'gpt-open-app':'公式ChatGPTアプリの起動を試みます。開かない場合はWeb版の予備ボタンを使ってください。',
-    'gpt-open-web':'ブラウザ版を別タブで開きます。アプリが開く場合はリンクを長押しして新しいタブで開いてください。'
-  };
-  $('gpt-status').textContent = messages[id] + ' プロンプトは自分で貼り付け・送信してください。';
+  if (id === 'gpt-open') {
+    $('gpt-manual-launch-guide').hidden = false;
+    $('gpt-open').setAttribute('aria-expanded', 'true');
+    $('gpt-manual-launch-guide').focus();
+    $('gpt-status').textContent = '手順を表示しました。ホーム画面から公式ChatGPTアプリを手動で開いてください。アプリの起動処理は実行していません。';
+  } else {
+    $('gpt-status').textContent = 'ブラウザ版を別タブで開きます。アプリが開く場合はリンクを長押しして新しいタブで開いてください。プロンプトは自分で貼り付け・送信してください。';
+  }
 });
 $('gpt-apply').addEventListener('click', applyGptAnswer);
 for (const id of ['character','topic','gpt-tone']) $(id).addEventListener('change', resetGptPrompt);
