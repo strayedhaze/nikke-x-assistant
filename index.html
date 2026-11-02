@@ -9,6 +9,7 @@
   <style>
     :root{color-scheme:dark;--bg:#101817;--panel:#1a2422;--line:#35443e;--text:#f3f5ed;--muted:#b0beb5;--accent:#d7f5a0;--ink:#202b17;--error:#ffb5ab}
     *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,"Noto Sans JP",sans-serif}button,input,select,textarea{font:inherit}button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.42}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:4px}button,input,select,textarea{border:1px solid var(--line);border-radius:12px}button{min-height:48px;padding:10px 16px;background:#26332e;color:var(--text);font-weight:700}a{color:var(--accent);text-underline-offset:4px}header{border-bottom:1px solid var(--line)}.header-inner{max-width:1080px;margin:auto;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-size:19px;font-weight:850;letter-spacing:.13em}.brand span{color:var(--accent)}.local-badge{font-size:12px;color:var(--accent);border:1px solid #607147;padding:4px 10px;border-radius:99px;white-space:nowrap}main{max-width:1080px;margin:auto;padding:40px 24px 24px}.eyebrow{color:var(--accent);font-size:12px;letter-spacing:.14em;font-weight:700}h1{font-size:clamp(27px,5.5vw,40px);line-height:1.4;letter-spacing:.02em;margin:10px 0}h2{font-size:18px;margin:0}.intro{color:var(--muted);margin:10px 0 28px}.layout{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}.panel{border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:24px}.step{color:var(--accent);font:12px/1.5 ui-monospace,monospace;letter-spacing:.12em;display:block;margin-bottom:8px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;border-radius:14px;background:#101817;margin-bottom:24px}.tabs button{border:0;background:transparent;color:var(--muted)}.tabs button[aria-pressed=true]{background:var(--accent);color:var(--ink)}label.field{display:block;font-size:14px;font-weight:700;margin:20px 0 8px}input,select,textarea{width:100%;padding:12px;background:#111b18;color:var(--text);min-height:48px}textarea{min-height:260px;resize:vertical;line-height:1.9}select{appearance:auto}.preview{border-left:2px solid var(--accent);padding:4px 0 4px 16px;margin:20px 0;color:#dce4d7;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}.wide{width:100%}.hint{font-size:13px;color:var(--muted);margin:10px 0}.editor-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.save{font-size:12px;color:var(--muted)}.counts{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:8px 0 0;font-size:12px;color:var(--muted)}.counts strong{font-size:20px;color:var(--text);font-variant-numeric:tabular-nums}.notice{background:#242e22;border:1px solid #4c5e39;border-radius:12px;padding:14px;font-size:13px;margin:20px 0}.check{display:flex;align-items:flex-start;gap:12px;font-size:14px;cursor:pointer}.check input{accent-color:var(--accent);width:22px;height:22px;min-height:22px;flex-shrink:0;margin:4px 0}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}.primary{background:var(--accent);color:var(--ink);border-color:var(--accent)}.actions .primary{grid-column:1/-1}.reply-box{padding:0 0 20px;border-bottom:1px solid var(--line);margin-bottom:20px}.reply-box label{margin-top:0}.reply-box button{margin-top:10px}.error{color:var(--error);font-size:13px;margin:6px 0}.status{min-height:28px;font-size:14px;margin:14px 0 0;color:var(--accent);overflow-wrap:anywhere}.delete{display:block;margin:20px auto 0;background:none;color:var(--muted);border-color:transparent;font-size:13px}.privacy{max-width:1080px;margin:0 auto;padding:16px 24px calc(28px + env(safe-area-inset-bottom));color:var(--muted);font-size:12px}.privacy p{margin:6px 0}[hidden]{display:none!important}@media(max-width:760px){.layout{grid-template-columns:1fr}main{padding:28px 16px 16px}.header-inner{padding:16px}.panel{padding:20px;border-radius:16px}.intro{font-size:14px;margin-bottom:22px}textarea{min-height:250px}.privacy{padding-left:20px;padding-right:20px}.save{max-width:54%;text-align:right}.brand{font-size:16px}}@media(prefers-reduced-motion:no-preference){button{transition:background .15s,opacity .15s}button:not(:disabled):hover{filter:brightness(1.1)}}
+    .compact{min-height:100px}.candidate{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:12px}.candidate p,.history-text{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}.candidate button{width:100%}.image-list{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.image-list figure{margin:0;max-width:120px}.image-list img{width:100px;height:100px;object-fit:cover;border-radius:10px}.image-list figcaption{font-size:12px;overflow-wrap:anywhere}.history-item{border-top:1px solid var(--line);padding:16px 0}.history-item button{margin:4px}.history-item time{font-size:12px;color:var(--muted)}
   </style>
 </head>
 <body>
@@ -25,6 +26,13 @@
       </div>
       <label class="field" for="character">ニケ</label>
       <select id="character"><option>紅蓮</option><option>リバーレリオ</option><option>スノーホワイト</option></select>
+      <label class="field" for="custom-character">別のニケ名（任意）</label>
+      <input id="custom-character" maxlength="50" placeholder="例：ラピ">
+      <div id="free-topic-box">
+        <label class="field" for="free-topic">自由な話題（任意）</label>
+        <textarea id="free-topic" class="compact" maxlength="500" placeholder="例：スキル育成の目標、今日のスクリーンショット"></textarea>
+        <p class="hint">ニケ名と話題から定型文を組み立てます。AIや外部APIは使いません。</p>
+      </div>
       <label class="field" for="topic">どんな話をする？</label>
       <select id="topic"><option value="growth">育成報告</option><option value="clear">攻略報告</option><option value="chat">交流</option></select>
       <p class="preview" id="preview"></p>
@@ -39,12 +47,23 @@
         <input id="post-url" type="url" inputmode="url" maxlength="2048" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://x.com/ユーザー名/status/123…" aria-describedby="url-help url-error">
         <p id="url-help" class="hint">x.com または twitter.com のポストURLを貼り付けてください。</p>
         <p id="url-error" class="error" hidden></p>
+        <label class="field" for="source-text">相手のポスト本文（手動で貼り付け）</label>
+        <textarea id="source-text" class="compact" maxlength="5000" placeholder="返信したいポストの本文を入力"></textarea>
+        <button type="button" id="generate-replies" class="wide">返信候補を3種類作る</button>
+        <p class="hint">本文の一部を話題として引用する定型候補です。内容を理解・判定する機能はありません。文脈に合わせて編集してください。</p>
+        <div id="reply-candidates" aria-live="polite"></div>
         <button type="button" id="open-post" class="wide" disabled>元のポストをXで開く ↗</button>
         <p class="hint">本文をコピー → 元のポストを開く → 返信欄に貼り付け。返信先や本文の自動入力は行いません。</p>
       </div>
       <label class="field" for="draft" style="margin-top:0">投稿・返信の本文</label>
       <textarea id="draft" maxlength="10000" placeholder="テンプレートから始めても、自由に書いても。" aria-describedby="count-help"></textarea>
       <div class="counts"><span id="count-help">文字数の目安（Xの加重カウントとは異なります）</span><span><strong id="count">0</strong> 文字</span></div>
+      <label class="field" for="images">画像を選ぶ（最大4枚・各10MB）</label>
+      <input id="images" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple aria-describedby="image-help image-status">
+      <p id="image-help" class="hint">画像はこの画面でのみ保持し、下書き・履歴には保存しません。再読み込みや履歴の切り替え後は選び直してください。X側の添付制限も確認してください。</p>
+      <div id="image-list" class="image-list"></div>
+      <button type="button" id="clear-images" hidden>画像を外す</button>
+      <p id="image-status" class="hint" role="status"></p>
       <div class="notice" id="flow-note">共有先でXを選び、内容を確認して手動で投稿してください。Xが一覧にない場合は、コピーして貼り付けてください。</div>
       <label class="check"><input id="confirmed" type="checkbox"><span>本文と事実関係を自分で確認しました。返信の場合は、返信先も確認しました。</span></label>
       <div class="actions">
@@ -54,9 +73,17 @@
       </div>
       <p class="hint" id="share-help">確認チェックを付けると共有できます。本文を変更するとチェックは外れます。</p>
       <p id="status" class="status" role="status" aria-live="polite"></p>
+      <button type="button" id="save-history" class="wide">下書きを履歴に保存</button>
+      <p id="history-status" class="hint" role="status"></p>
       <button type="button" id="delete" class="delete">保存した下書きを削除</button>
     </section>
   </div>
+  <section class="panel" style="margin-top:20px" aria-labelledby="history-heading">
+    <span class="step">03 / DRAFT HISTORY</span><h2 id="history-heading">下書き履歴</h2>
+    <p class="hint">最大30件。保存はボタン操作で行います。共有の終了を「送信済み」とは判定しません。「編集」で読み込み、同じ履歴へ上書きできます。</p>
+    <button type="button" id="new-history">別の下書きとして編集する</button>
+    <div id="history-list"></div>
+  </section>
 </main>
 <footer class="privacy">
   <p>下書きはこのブラウザの localStorage にのみ保存します。共有やXを開く操作をするまで、このアプリから本文を外部へ送信しません。共有端末では利用後に下書きを削除してください。</p>
@@ -69,6 +96,12 @@ const characters = ['紅蓮', 'リバーレリオ', 'スノーホワイト'];
 const topics = ['growth', 'clear', 'chat'];
 const $ = id => document.getElementById(id);
 let mode = 'post';
+const HISTORY_KEY = 'nikke-note.history.v1';
+let historyEntries = [];
+let editingHistoryId = null;
+let selectedImages = [];
+let imageUrls = [];
+let replyCandidates = [];
 const templates = {
   post: {
     growth: n => `今日は${n}を育成。［育てたところ］を進めました！\n少しずつ強くなっていくのがうれしい。次は［次の目標］を目指します。\n#NIKKE`,
@@ -81,7 +114,111 @@ const templates = {
     chat: n => `${n}の話、思わず反応してしまいました。私も［共感したところ］が好きです！ よかったら、またお話しできるとうれしいです。`
   }
 };
-function templateText() { return templates[mode][$('topic').value]($('character').value); }
+function templateText() {
+  const name = $('custom-character').value.trim() || $('character').value;
+  const topic = $('free-topic').value.trim();
+  if (mode === 'post' && topic) return `${name}のことを考えながら、今日のNIKKEメモ。\n${topic}\nみなさんの近況や工夫も、よかったら教えてください。\n#NIKKE`;
+  return templates[mode][$('topic').value](name);
+}
+function useText(text) {
+  if ($('draft').value.trim() && !window.confirm('今の本文を候補で置き換えますか？')) return;
+  $('draft').value = text; changed(); $('draft').focus();
+}
+function generateReplies() {
+  const source = $('source-text').value.trim();
+  if (!source) { $('status').textContent = '相手のポスト本文を入力してください。'; return; }
+  const excerpt = Array.from(source.replace(/\s+/g, ' ')).slice(0,60).join('');
+  const quote = `「${excerpt}${Array.from(source.replace(/\s+/g, ' ')).length > 60 ? '…' : ''}」`;
+  replyCandidates = [
+    ['自然', `${quote}の投稿、読ませてもらいました。［自分の感想や聞いてみたいこと］`],
+    ['丁寧', `投稿を拝見しました。${quote}について、［感想や質問］。よろしければ、お話を伺えるとうれしいです。`],
+    ['親しみやすい', `${quote}の話、気になりました！ ［自分の感想］。よかったら、またお話ししましょう！`]
+  ];
+  renderCandidates();
+}
+function renderCandidates() {
+  $('reply-candidates').replaceChildren();
+  for (const [tone,text] of replyCandidates) {
+    const card = document.createElement('div'); card.className = 'candidate';
+    const heading = document.createElement('strong'); heading.textContent = tone;
+    const body = document.createElement('p'); body.textContent = text;
+    const button = document.createElement('button'); button.type = 'button'; button.textContent = `${tone}の候補を本文で編集`;
+    button.addEventListener('click', () => useText(text));
+    card.append(heading,body,button); $('reply-candidates').append(card);
+  }
+}
+function clearImages() {
+  imageUrls.forEach(url => URL.revokeObjectURL(url)); imageUrls = []; selectedImages = [];
+  $('images').value = ''; $('image-list').replaceChildren(); $('clear-images').hidden = true;
+  $('image-status').textContent = ''; $('confirmed').checked = false; update();
+}
+function selectImages(files) {
+  clearImages();
+  if (files.length > 4 || files.some(file => !['image/jpeg','image/png','image/webp','image/gif'].includes(file.type) || file.size > 10 * 1024 * 1024 || !file.size)) {
+    $('image-status').textContent = 'JPEG・PNG・WebP・GIFを最大4枚、各10MB以下で選んでください。'; return;
+  }
+  selectedImages = files;
+  for (const file of files) {
+    const url = URL.createObjectURL(file); imageUrls.push(url);
+    const figure = document.createElement('figure'); const img = document.createElement('img');
+    img.src = url; img.alt = file.name;
+    const caption = document.createElement('figcaption'); caption.textContent = file.name;
+    figure.append(img,caption); $('image-list').append(figure);
+  }
+  $('clear-images').hidden = !files.length;
+  $('image-status').textContent = files.length ? `${files.length}枚選択中。共有先が画像と本文の両方を受け取るか確認してください。` : '';
+  changed();
+}
+function snapshot() {
+  return {mode, character:$('character').value, topic:$('topic').value, text:$('draft').value, url:$('post-url').value,
+    customCharacter:$('custom-character').value, freeTopic:$('free-topic').value, sourceText:$('source-text').value};
+}
+function restore(saved) {
+  mode = saved.mode === 'reply' ? 'reply' : 'post';
+  $('character').value = characters.includes(saved.character) ? saved.character : characters[0];
+  $('topic').value = topics.includes(saved.topic) ? saved.topic : topics[0];
+  for (const [field,key,limit] of [['draft','text',10000],['post-url','url',2048],['custom-character','customCharacter',50],['free-topic','freeTopic',500],['source-text','sourceText',5000]]) {
+    $(field).value = typeof saved[key] === 'string' ? saved[key].slice(0,limit) : '';
+  }
+  replyCandidates = []; renderCandidates(); $('confirmed').checked = false; update();
+}
+function persistHistory(next) {
+  try { localStorage.setItem(HISTORY_KEY, JSON.stringify(next)); historyEntries = next; renderHistory(); return true; }
+  catch { $('history-status').textContent = '履歴を保存・削除できません。容量やChromeのサイト設定を確認してください。'; return false; }
+}
+function renderHistory() {
+  $('history-list').replaceChildren();
+  $('save-history').textContent = editingHistoryId ? '編集中の履歴を上書き保存' : '下書きを履歴に保存';
+  if (!historyEntries.length) { const p = document.createElement('p'); p.className = 'hint'; p.textContent = '履歴はまだありません。'; $('history-list').append(p); }
+  for (const entry of historyEntries) {
+    const card = document.createElement('article'); card.className = 'history-item';
+    const date = document.createElement('time'); date.dateTime = entry.updatedAt; date.textContent = `${entry.mode === 'reply' ? '返信の下書き' : '投稿の下書き'} · ${new Date(entry.updatedAt).toLocaleString('ja-JP')}`;
+    const body = document.createElement('p'); body.className = 'history-text'; body.textContent = entry.text;
+    const edit = document.createElement('button'); edit.type = 'button'; edit.textContent = '編集';
+    edit.addEventListener('click', () => {
+      if (!window.confirm('現在の編集内容をこの履歴で置き換えますか？ 必要なら先に履歴へ保存してください。')) return;
+      editingHistoryId = entry.id; clearImages(); restore(entry); save(); renderHistory(); $('draft').focus();
+    });
+    const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = '削除';
+    remove.addEventListener('click', () => {
+      if (!window.confirm('この履歴を削除しますか？')) return;
+      if (persistHistory(historyEntries.filter(item => item.id !== entry.id))) {
+        if (editingHistoryId === entry.id) editingHistoryId = null;
+        renderHistory(); $('history-status').textContent = '履歴を削除しました。編集中の本文は残ります。';
+      }
+    });
+    card.append(date,body,edit,remove); $('history-list').append(card);
+  }
+}
+function saveHistory() {
+  if (!$('draft').value.trim()) { $('history-status').textContent = '本文を入力してから保存してください。'; return; }
+  if (!editingHistoryId && historyEntries.length >= 30) { $('history-status').textContent = '履歴は30件までです。不要な履歴を削除してください。'; return; }
+  const id = editingHistoryId || crypto.randomUUID();
+  const entry = {...snapshot(), id, updatedAt:new Date().toISOString()};
+  if (persistHistory([entry, ...historyEntries.filter(item => item.id !== id)])) {
+    editingHistoryId = id; renderHistory(); $('history-status').textContent = '下書きとして保存しました。投稿済みかどうかは判定しません。画像は保存されません。';
+  }
+}
 function parsePostUrl(value) {
   try {
     const url = new URL(value.trim());
@@ -102,6 +239,7 @@ function update() {
   $('post-mode').setAttribute('aria-pressed', String(mode === 'post'));
   $('reply-mode').setAttribute('aria-pressed', String(mode === 'reply'));
   $('reply-box').hidden = mode !== 'reply';
+  $('free-topic-box').hidden = mode !== 'post';
   $('preview').textContent = templateText();
   $('count').textContent = countCharacters($('draft').value);
   const textPresent = Boolean($('draft').value.trim());
@@ -118,11 +256,11 @@ function update() {
   $('flow-note').textContent = mode === 'reply'
     ? '返信は手動で行います。共有だけでは返信先を指定できません。コピーして元のポストを開き、返信欄に貼り付けてください。URLは形式のみ検証し、存在や内容は取得しません。'
     : '共有先でXを選び、内容を確認して手動で投稿してください。Xが一覧にない場合は、コピーして貼り付けてください。';
-  $('share').textContent = typeof navigator.share === 'function' ? '共有する' : '共有の代わりにコピー';
+  $('share').textContent = typeof navigator.share === 'function' ? '共有する' : (selectedImages.length ? '画像共有の代替方法を確認' : '共有の代わりにコピー');
 }
 function save() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({mode, character:$('character').value, topic:$('topic').value, text:$('draft').value, url:$('post-url').value}));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot()));
     $('save-state').textContent = '端末内に保存済み';
   } catch { $('save-state').textContent = '保存できません。この画面を閉じる前にコピーしてください'; }
 }
@@ -142,12 +280,18 @@ async function copyText() {
 function openExternal(url) {
   window.open(url, '_blank', 'noopener,noreferrer');
   // With noopener a successful open may also return null; never infer failure from it.
-  $('status').textContent = 'Xを別タブで開きます。開かない場合はChromeのポップアップ設定を確認してください。送信はX上で手動で行ってください。';
+  $('status').textContent = 'Xを別タブで開きます。開かない場合はChromeのポップアップ設定を確認してください。送信はX上で手動で行ってください。' + (selectedImages.length ? '画像はXアプリで手動添付してください。' : '');
 }
 $('post-mode').addEventListener('click', () => setMode('post'));
 $('reply-mode').addEventListener('click', () => setMode('reply'));
 for (const id of ['character','topic']) $(id).addEventListener('change', changed);
-for (const id of ['draft','post-url']) $(id).addEventListener('input', changed);
+for (const id of ['draft','post-url','custom-character','free-topic','source-text']) $(id).addEventListener('input', changed);
+$('source-text').addEventListener('input', () => { replyCandidates = []; renderCandidates(); });
+$('generate-replies').addEventListener('click', generateReplies);
+$('images').addEventListener('change', () => selectImages(Array.from($('images').files)));
+$('clear-images').addEventListener('click', clearImages);
+$('save-history').addEventListener('click', saveHistory);
+$('new-history').addEventListener('click', () => { editingHistoryId = null; renderHistory(); $('history-status').textContent = '次の保存では別の履歴として追加します。'; });
 $('confirmed').addEventListener('change', update);
 $('apply').addEventListener('click', () => {
   if ($('draft').value.trim() && !window.confirm('今の本文をテンプレートで置き換えますか？')) return;
@@ -156,15 +300,22 @@ $('apply').addEventListener('click', () => {
 $('copy').addEventListener('click', copyText);
 $('share').addEventListener('click', async () => {
   if ($('share').disabled) return;
-  if (typeof navigator.share !== 'function') { await copyText(); return; }
   const data = {text:$('draft').value};
+  if (selectedImages.length) {
+    data.files = [...selectedImages];
+    try {
+      if (typeof navigator.share !== 'function' || typeof navigator.canShare !== 'function' || !navigator.canShare(data)) {
+        $('status').textContent = 'この環境では画像付き共有ができません。「本文をコピー」を押し、Xアプリで画像を手動添付してください。'; return;
+      }
+    } catch { $('status').textContent = '画像共有の対応確認ができません。「本文をコピー」を押し、Xアプリで画像を手動添付してください。'; return; }
+  } else if (typeof navigator.share !== 'function') { await copyText(); return; }
   try {
-    if (typeof navigator.canShare === 'function' && !navigator.canShare(data)) { await copyText(); return; }
+    if (!selectedImages.length && typeof navigator.canShare === 'function' && !navigator.canShare(data)) { await copyText(); return; }
     await navigator.share(data);
-    $('status').textContent = '共有操作が終了しました。投稿・返信の完了はX上で確認してください。Xが一覧にない場合は「本文をコピー」を使ってください。';
+    $('status').textContent = '共有操作が終了しました。投稿・返信の完了はX上で確認してください。Xが一覧にない場合は「本文をコピー」を使い、画像はXアプリで手動添付してください。';
   } catch (error) {
-    if (error.name === 'AbortError') $('status').textContent = '共有がキャンセルされたか、共有先が見つかりませんでした。必要なら「本文をコピー」を使ってください。';
-    else { $('status').textContent = '共有できませんでした。「本文をコピー」を押してXに貼り付けてください。'; }
+    if (error.name === 'AbortError') $('status').textContent = '共有がキャンセルされたか、共有先が見つかりませんでした。必要なら「本文をコピー」を使い、画像はXアプリで手動添付してください。';
+    else { $('status').textContent = '共有できませんでした。「本文をコピー」を押してXに貼り付け、画像はXアプリで手動添付してください。'; }
   }
 });
 $('compose').addEventListener('click', () => {
@@ -176,23 +327,29 @@ $('open-post').addEventListener('click', () => {
 });
 $('delete').addEventListener('click', () => {
   if (!window.confirm('このアプリに保存した下書きと入力内容を削除しますか？')) return;
-  $('draft').value = ''; $('post-url').value = ''; $('character').value = characters[0]; $('topic').value = topics[0]; mode = 'post';
+  clearImages(); restore({}); editingHistoryId = null; renderHistory();
   $('confirmed').checked = false; update();
   try { localStorage.removeItem(STORAGE_KEY); $('save-state').textContent = '保存した下書きを削除しました'; }
   catch { $('save-state').textContent = '保存データを削除できません。Chromeのサイト設定で削除してください'; }
-  $('status').textContent = '画面の下書きを消去しました。';
+  $('status').textContent = '画面の下書きを消去しました。履歴は各項目の削除ボタンから消せます。';
 });
 try {
   const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
   if (saved && typeof saved === 'object') {
-    if (saved.mode === 'reply') mode = 'reply';
-    if (characters.includes(saved.character)) $('character').value = saved.character;
-    if (topics.includes(saved.topic)) $('topic').value = saved.topic;
-    if (typeof saved.text === 'string') $('draft').value = saved.text.slice(0,10000);
-    if (typeof saved.url === 'string') $('post-url').value = saved.url.slice(0,2048);
+    restore(saved);
     $('save-state').textContent = '端末内の下書きを復元しました';
   }
 } catch { $('save-state').textContent = '保存データを読み込めません。本文は編集できます'; }
+try {
+  const entries = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+  if (!Array.isArray(entries)) throw new Error('Invalid history');
+  const seen = new Set();
+  historyEntries = entries.filter(entry => {
+    if (!entry || typeof entry.id !== 'string' || seen.has(entry.id) || typeof entry.text !== 'string' || !Number.isFinite(Date.parse(entry.updatedAt))) return false;
+    seen.add(entry.id); return true;
+  }).slice(0,30);
+} catch { $('history-status').textContent = '履歴を読み込めませんでした。現在の下書きは編集できます。'; }
+renderHistory();
 $('confirmed').checked = false;
 update();
 </script>

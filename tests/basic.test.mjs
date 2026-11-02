@@ -121,6 +121,87 @@ test('NIKKE NOTE: Chromium functional checks',{timeout:60000},async t=>{
         assert.equal(await ev('document.documentElement.scrollWidth<=innerWidth'),true);
       }
     });
+    await t.test('free topic and custom character are reflected without HTML execution',async()=>{
+      await ev(`window.confirm=()=>true;setMode('post');$('custom-character').value='ラピ';$('free-topic').value='今日の育成を振り返りたい <img src=x onerror=alert(1)>';$('free-topic').dispatchEvent(new Event('input'));$('apply').click();`);
+      assert.match(await ev("$('draft').value"),/ラピ/);
+      assert.match(await ev("$('draft').value"),/今日の育成/);
+      assert.equal(await ev("$('preview').querySelector('img')"),null);
+    });
+    await t.test('three source-based reply tones can be selected and edited',async()=>{
+      await ev(`setMode('reply');$('source-text').value='紅蓮で攻略できました！';$('source-text').dispatchEvent(new Event('input'));$('generate-replies').click();`);
+      assert.deepEqual(await ev("replyCandidates.map(x=>x[0])"),['自然','丁寧','親しみやすい']);
+      assert.equal(await ev("replyCandidates.every(x=>x[1].includes('紅蓮で攻略できました！'))"),true);
+      for(const i of [0,1,2]){
+        await ev(`$('reply-candidates').querySelectorAll('button')[${i}].click();$('draft').value+=' 自分の感想';changed();`);
+        assert.match(await ev("$('draft').value"),/自分の感想/);
+        assert.equal(await ev("$('confirmed').checked"),false);
+      }
+      await ev(`$('source-text').value='別の本文';$('source-text').dispatchEvent(new Event('input'));`);
+      assert.equal(await ev("$('reply-candidates').childElementCount"),0);
+    });
+    await t.test('extended autosave restores source and topic with consent cleared',async()=>{
+      await ev(`changed();`);await load();
+      assert.deepEqual(await ev("[$('custom-character').value,$('free-topic').value,$('source-text').value,$('confirmed').checked]"),['ラピ','今日の育成を振り返りたい <img src=x onerror=alert(1)>','別の本文',false]);
+    });
+    await t.test('history save, new entry, reload, edit, overwrite and delete',async()=>{
+      await ev(`window.confirm=()=>true;$('save-history').click();$('new-history').click();$('draft').value='二つ目';changed();$('save-history').click();`);
+      assert.equal(await ev('historyEntries.length'),2);
+      await load();await ev(`window.confirm=()=>true;$('history-list').querySelectorAll('article')[1].querySelector('button').click();`);
+      assert.equal(await ev("$('source-text').value"),'別の本文');
+      assert.equal(await ev("$('confirmed').checked"),false);
+      await ev(`$('draft').value='履歴を修正';changed();$('save-history').click();`);
+      assert.deepEqual(await ev('[historyEntries.length,historyEntries[0].text]'),[2,'履歴を修正']);
+      await ev(`$('history-list').querySelector('article').querySelectorAll('button')[1].click();`);
+      assert.equal(await ev('historyEntries.length'),1);
+    });
+    await t.test('history quota errors do not delete data; explicit 30 entry limit',async()=>{
+      await ev(`window.realSet=Storage.prototype.setItem;Storage.prototype.setItem=()=>{throw new Error('quota');};$('save-history').click();`);
+      assert.match(await ev("$('history-status').textContent"),/保存・削除できません/);
+      assert.equal(await ev('historyEntries.length'),1);
+      await ev(`Storage.prototype.setItem=window.realSet;window.previousHistory=historyEntries;historyEntries=Array.from({length:30},(_,i)=>({...snapshot(),id:String(i),updatedAt:new Date().toISOString()}));editingHistoryId=null;saveHistory();`);
+      assert.match(await ev("$('history-status').textContent"),/30件/);
+      await ev('historyEntries=window.previousHistory;renderHistory();');
+    });
+    await t.test('image file selection previews and validates; files are never persisted',async()=>{
+      await ev(`window.pngFile=new File([new Uint8Array([137,80,78,71])],'nikke.png',{type:'image/png'});window.dt=new DataTransfer();dt.items.add(pngFile);$('images').files=dt.files;$('images').dispatchEvent(new Event('change'));`);
+      assert.equal(await ev('selectedImages.length'),1);
+      assert.equal(await ev("$('image-list').querySelectorAll('img').length"),1);
+      assert.equal(await ev("$('confirmed').checked"),false);
+      assert.equal(await ev("Object.keys(JSON.parse(localStorage.getItem(STORAGE_KEY))).includes('files')"),false);
+      await ev(`selectImages(Array(5).fill(pngFile));`);
+      assert.equal(await ev('selectedImages.length'),0);
+      assert.match(await ev("$('image-status').textContent"),/最大4枚/);
+      await ev(`selectImages([new File(['text'],'bad.svg',{type:'image/svg+xml'})]);`);
+      assert.equal(await ev('selectedImages.length'),0);
+    });
+    await t.test('image sharing checks full payload and preserves text share after removal',async()=>{
+      await ev(`setMode('post');selectImages([pngFile]);window.shareCalls=[];window.checkedPayloads=[];
+        Object.defineProperty(navigator,'canShare',{configurable:true,value:data=>{checkedPayloads.push({text:data.text,files:data.files?.length});return true;}});
+        Object.defineProperty(navigator,'share',{configurable:true,value:async data=>{shareCalls.push({text:data.text,files:data.files?.map(f=>f.name)});}});
+        $('confirmed').checked=true;update();$('share').click();`);
+      assert.deepEqual(await ev('shareCalls[0].files'),['nikke.png']);
+      assert.equal(await ev('checkedPayloads[0].files'),1);
+      assert.equal(await ev('shareCalls[0].text'),await ev("$('draft').value"));
+      assert.equal(await ev("historyEntries.some(e=>'sent' in e || 'posted' in e)"),false);
+      await ev(`$('clear-images').click();$('confirmed').checked=true;update();$('share').click();`);
+      assert.equal(await ev("Object.hasOwn(shareCalls[1],'files') && shareCalls[1].files!==undefined"),false);
+    });
+    await t.test('image sharing unsupported, missing capability check, rejection and cancel',async()=>{
+      await ev(`selectImages([pngFile]);$('confirmed').checked=true;update();Object.defineProperty(navigator,'canShare',{configurable:true,value:()=>false});$('share').click();`);
+      assert.match(await ev("$('status').textContent"),/手動添付/);
+      assert.equal(await ev('shareCalls.length'),2);
+      await ev(`Object.defineProperty(navigator,'canShare',{configurable:true,value:undefined});$('share').click();`);
+      assert.match(await ev("$('status').textContent"),/手動添付/);
+      await ev(`Object.defineProperty(navigator,'canShare',{configurable:true,value:()=>true});Object.defineProperty(navigator,'share',{configurable:true,value:async()=>{throw new Error('failure');}});$('share').click();`);
+      assert.match(await ev("$('status').textContent"),/共有できません.*手動添付/);
+      await ev(`Object.defineProperty(navigator,'share',{configurable:true,value:async()=>{throw new DOMException('cancel','AbortError');}});$('share').click();`);
+      assert.match(await ev("$('status').textContent"),/キャンセル/);
+      await load();assert.equal(await ev('selectedImages.length'),0);
+      for(const width of [360,412,480]){
+        await send('Emulation.setDeviceMetricsOverride',{width,height:915,deviceScaleFactor:1,mobile:true});
+        assert.equal(await ev('document.documentElement.scrollWidth<=innerWidth'),true);
+      }
+    });
     await t.test('malformed storage does not break startup',async()=>{
       await ev("localStorage.setItem(STORAGE_KEY,'{broken')");await load();
       assert.equal(await ev("$('share').disabled"),true);assert.match(await ev("$('save-state').textContent"),/読み込めません/);
