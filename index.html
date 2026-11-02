@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101817">
+  <meta name="referrer" content="no-referrer">
+  <title>NIKKE NOTE — X投稿・返信支援</title>
+  <style>
+    :root{color-scheme:dark;--bg:#101817;--panel:#1a2422;--line:#35443e;--text:#f3f5ed;--muted:#b0beb5;--accent:#d7f5a0;--ink:#202b17;--error:#ffb5ab}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,"Noto Sans JP",sans-serif}button,input,select,textarea{font:inherit}button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.42}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:4px}button,input,select,textarea{border:1px solid var(--line);border-radius:12px}button{min-height:48px;padding:10px 16px;background:#26332e;color:var(--text);font-weight:700}a{color:var(--accent);text-underline-offset:4px}header{border-bottom:1px solid var(--line)}.header-inner{max-width:1080px;margin:auto;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-size:19px;font-weight:850;letter-spacing:.13em}.brand span{color:var(--accent)}.local-badge{font-size:12px;color:var(--accent);border:1px solid #607147;padding:4px 10px;border-radius:99px;white-space:nowrap}main{max-width:1080px;margin:auto;padding:40px 24px 24px}.eyebrow{color:var(--accent);font-size:12px;letter-spacing:.14em;font-weight:700}h1{font-size:clamp(27px,5.5vw,40px);line-height:1.4;letter-spacing:.02em;margin:10px 0}h2{font-size:18px;margin:0}.intro{color:var(--muted);margin:10px 0 28px}.layout{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}.panel{border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:24px}.step{color:var(--accent);font:12px/1.5 ui-monospace,monospace;letter-spacing:.12em;display:block;margin-bottom:8px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;border-radius:14px;background:#101817;margin-bottom:24px}.tabs button{border:0;background:transparent;color:var(--muted)}.tabs button[aria-pressed=true]{background:var(--accent);color:var(--ink)}label.field{display:block;font-size:14px;font-weight:700;margin:20px 0 8px}input,select,textarea{width:100%;padding:12px;background:#111b18;color:var(--text);min-height:48px}textarea{min-height:260px;resize:vertical;line-height:1.9}select{appearance:auto}.preview{border-left:2px solid var(--accent);padding:4px 0 4px 16px;margin:20px 0;color:#dce4d7;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}.wide{width:100%}.hint{font-size:13px;color:var(--muted);margin:10px 0}.editor-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.save{font-size:12px;color:var(--muted)}.counts{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:8px 0 0;font-size:12px;color:var(--muted)}.counts strong{font-size:20px;color:var(--text);font-variant-numeric:tabular-nums}.notice{background:#242e22;border:1px solid #4c5e39;border-radius:12px;padding:14px;font-size:13px;margin:20px 0}.check{display:flex;align-items:flex-start;gap:12px;font-size:14px;cursor:pointer}.check input{accent-color:var(--accent);width:22px;height:22px;min-height:22px;flex-shrink:0;margin:4px 0}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}.primary{background:var(--accent);color:var(--ink);border-color:var(--accent)}.actions .primary{grid-column:1/-1}.reply-box{padding:0 0 20px;border-bottom:1px solid var(--line);margin-bottom:20px}.reply-box label{margin-top:0}.reply-box button{margin-top:10px}.error{color:var(--error);font-size:13px;margin:6px 0}.status{min-height:28px;font-size:14px;margin:14px 0 0;color:var(--accent);overflow-wrap:anywhere}.delete{display:block;margin:20px auto 0;background:none;color:var(--muted);border-color:transparent;font-size:13px}.privacy{max-width:1080px;margin:0 auto;padding:16px 24px calc(28px + env(safe-area-inset-bottom));color:var(--muted);font-size:12px}.privacy p{margin:6px 0}[hidden]{display:none!important}@media(max-width:760px){.layout{grid-template-columns:1fr}main{padding:28px 16px 16px}.header-inner{padding:16px}.panel{padding:20px;border-radius:16px}.intro{font-size:14px;margin-bottom:22px}textarea{min-height:250px}.privacy{padding-left:20px;padding-right:20px}.save{max-width:54%;text-align:right}.brand{font-size:16px}}@media(prefers-reduced-motion:no-preference){button{transition:background .15s,opacity .15s}button:not(:disabled):hover{filter:brightness(1.1)}}
+  </style>
+</head>
+<body>
+<header><div class="header-inner"><div class="brand">NIKKE <span>NOTE</span></div><span class="local-badge">● 端末内に保存</span></div></header>
+<main>
+  <div class="eyebrow">COMMANDER'S DRAFT ROOM</div>
+  <h1>今日の一歩を、ことばに。</h1>
+  <p class="intro">育成の記録も、攻略の喜びも。NIKKEの話を、自分らしい一文で。</p>
+  <div class="layout">
+    <section class="panel" aria-labelledby="template-heading">
+      <span class="step">01 / TEMPLATE</span><h2 id="template-heading">話題を選ぶ</h2>
+      <div class="tabs" role="group" aria-label="文章の用途" style="margin-top:20px">
+        <button type="button" id="post-mode" aria-pressed="true">新規投稿</button><button type="button" id="reply-mode" aria-pressed="false">返信</button>
+      </div>
+      <label class="field" for="character">ニケ</label>
+      <select id="character"><option>紅蓮</option><option>リバーレリオ</option><option>スノーホワイト</option></select>
+      <label class="field" for="topic">どんな話をする？</label>
+      <select id="topic"><option value="growth">育成報告</option><option value="clear">攻略報告</option><option value="chat">交流</option></select>
+      <p class="preview" id="preview"></p>
+      <button type="button" id="apply" class="wide">このテンプレートを使う</button>
+      <p class="hint">［ ］の部分を自分の記録に書き換えてください。本文がある場合は、置き換える前に確認します。</p>
+    </section>
+    <section class="panel" aria-labelledby="editor-heading">
+      <span class="step">02 / YOUR WORDS</span>
+      <div class="editor-head"><h2 id="editor-heading">下書きを整える</h2><span class="save" id="save-state" role="status">端末内に自動保存</span></div>
+      <div id="reply-box" class="reply-box" hidden>
+        <label class="field" for="post-url">返信するポストのURL</label>
+        <input id="post-url" type="url" inputmode="url" maxlength="2048" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://x.com/ユーザー名/status/123…" aria-describedby="url-help url-error">
+        <p id="url-help" class="hint">x.com または twitter.com のポストURLを貼り付けてください。</p>
+        <p id="url-error" class="error" hidden></p>
+        <button type="button" id="open-post" class="wide" disabled>元のポストをXで開く ↗</button>
+        <p class="hint">本文をコピー → 元のポストを開く → 返信欄に貼り付け。返信先や本文の自動入力は行いません。</p>
+      </div>
+      <label class="field" for="draft" style="margin-top:0">投稿・返信の本文</label>
+      <textarea id="draft" maxlength="10000" placeholder="テンプレートから始めても、自由に書いても。" aria-describedby="count-help"></textarea>
+      <div class="counts"><span id="count-help">文字数の目安（Xの加重カウントとは異なります）</span><span><strong id="count">0</strong> 文字</span></div>
+      <div class="notice" id="flow-note">共有先でXを選び、内容を確認して手動で投稿してください。Xが一覧にない場合は、コピーして貼り付けてください。</div>
+      <label class="check"><input id="confirmed" type="checkbox"><span>本文と事実関係を自分で確認しました。返信の場合は、返信先も確認しました。</span></label>
+      <div class="actions">
+        <button type="button" id="share" class="primary" disabled>共有する</button>
+        <button type="button" id="copy" disabled>本文をコピー</button>
+        <button type="button" id="compose" disabled>Xの新規投稿を開く ↗</button>
+      </div>
+      <p class="hint" id="share-help">確認チェックを付けると共有できます。本文を変更するとチェックは外れます。</p>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <button type="button" id="delete" class="delete">保存した下書きを削除</button>
+    </section>
+  </div>
+</main>
+<footer class="privacy">
+  <p>下書きはこのブラウザの localStorage にのみ保存します。共有やXを開く操作をするまで、このアプリから本文を外部へ送信しません。共有端末では利用後に下書きを削除してください。</p>
+  <p>Xのログイン情報の取得・画面の読み取り・自動操作・自動送信は行いません。NIKKEおよびXの非公式ファンツールです。</p>
+</footer>
+<script>
+'use strict';
+const STORAGE_KEY = 'nikke-note.draft.v1';
+const characters = ['紅蓮', 'リバーレリオ', 'スノーホワイト'];
+const topics = ['growth', 'clear', 'chat'];
+const $ = id => document.getElementById(id);
+let mode = 'post';
+const templates = {
+  post: {
+    growth: n => `今日は${n}を育成。［育てたところ］を進めました！\n少しずつ強くなっていくのがうれしい。次は［次の目標］を目指します。\n#NIKKE`,
+    clear: n => `${n}と一緒に［ステージ・ボス名］をクリア！\n［編成や立ち回りで工夫したこと］がうまくいきました。まだ改善できそうなので、次も挑戦してみます。\n#NIKKE`,
+    chat: n => `最近は${n}の［好きなところ］が気になっています。\n同じく好きな指揮官さん、よかったらお気に入りのポイントを教えてください！\n#NIKKE`
+  },
+  reply: {
+    growth: n => `育成の記録、参考になります！ 私も${n}の［育てているところ］を進めているところです。お互い、少しずつ育てていきたいですね。`,
+    clear: n => `攻略おつかれさまです！ ［参考になったところ］が特に勉強になりました。私も${n}を編成して挑戦してみたいです。`,
+    chat: n => `${n}の話、思わず反応してしまいました。私も［共感したところ］が好きです！ よかったら、またお話しできるとうれしいです。`
+  }
+};
+function templateText() { return templates[mode][$('topic').value]($('character').value); }
+function parsePostUrl(value) {
+  try {
+    const url = new URL(value.trim());
+    if (url.protocol !== 'https:' || url.username || url.password || url.port) return null;
+    if (!['x.com','www.x.com','twitter.com','www.twitter.com','mobile.twitter.com','mobile.x.com'].includes(url.hostname)) return null;
+    const match = url.pathname.match(/^\/(?:[A-Za-z0-9_]{1,15}\/status|i\/web\/status)\/([1-9][0-9]{0,24})\/?$/);
+    if (!match) return null;
+    // Normalize tracking parameters away. Validation checks format, not existence.
+    return `https://x.com/i/web/status/${match[1]}`;
+  } catch { return null; }
+}
+function countCharacters(value) {
+  return typeof Intl.Segmenter === 'function'
+    ? [...new Intl.Segmenter('ja', {granularity:'grapheme'}).segment(value)].length
+    : Array.from(value).length;
+}
+function update() {
+  $('post-mode').setAttribute('aria-pressed', String(mode === 'post'));
+  $('reply-mode').setAttribute('aria-pressed', String(mode === 'reply'));
+  $('reply-box').hidden = mode !== 'reply';
+  $('preview').textContent = templateText();
+  $('count').textContent = countCharacters($('draft').value);
+  const textPresent = Boolean($('draft').value.trim());
+  const validUrl = Boolean(parsePostUrl($('post-url').value));
+  const urlInvalid = Boolean($('post-url').value.trim()) && !validUrl;
+  $('url-error').hidden = !urlInvalid;
+  $('url-error').textContent = urlInvalid ? '有効なHTTPSのポストURLを入力してください（例：https://x.com/nikke/status/123）。' : '';
+  $('post-url').setAttribute('aria-invalid', String(urlInvalid));
+  $('open-post').disabled = !validUrl;
+  $('copy').disabled = !textPresent;
+  $('share').disabled = !textPresent || !$('confirmed').checked || (mode === 'reply' && !validUrl);
+  $('compose').hidden = mode === 'reply';
+  $('compose').disabled = !textPresent || !$('confirmed').checked;
+  $('flow-note').textContent = mode === 'reply'
+    ? '返信は手動で行います。共有だけでは返信先を指定できません。コピーして元のポストを開き、返信欄に貼り付けてください。URLは形式のみ検証し、存在や内容は取得しません。'
+    : '共有先でXを選び、内容を確認して手動で投稿してください。Xが一覧にない場合は、コピーして貼り付けてください。';
+  $('share').textContent = typeof navigator.share === 'function' ? '共有する' : '共有の代わりにコピー';
+}
+function save() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({mode, character:$('character').value, topic:$('topic').value, text:$('draft').value, url:$('post-url').value}));
+    $('save-state').textContent = '端末内に保存済み';
+  } catch { $('save-state').textContent = '保存できません。この画面を閉じる前にコピーしてください'; }
+}
+function changed() { $('confirmed').checked = false; $('status').textContent = ''; update(); save(); }
+function setMode(next) { if (mode !== next) { mode = next; changed(); } }
+function manualCopy() {
+  $('draft').focus(); $('draft').select(); $('draft').setSelectionRange(0,$('draft').value.length);
+  $('status').textContent = '自動コピーできませんでした。本文を長押しし、必要なら「すべて選択」→「コピー」を選んでください。Xの返信欄・投稿欄に手動で貼り付けてください。';
+}
+async function copyText() {
+  try {
+    if (!navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') { manualCopy(); return; }
+    await navigator.clipboard.writeText($('draft').value);
+    $('status').textContent = mode === 'reply' ? 'コピーしました。元のポストを開き、返信欄に貼り付けてください。' : 'コピーしました。Xの投稿欄に貼り付けてください。共有先にXがない場合も、この方法を使えます。';
+  } catch { manualCopy(); }
+}
+function openExternal(url) {
+  window.open(url, '_blank', 'noopener,noreferrer');
+  // With noopener a successful open may also return null; never infer failure from it.
+  $('status').textContent = 'Xを別タブで開きます。開かない場合はChromeのポップアップ設定を確認してください。送信はX上で手動で行ってください。';
+}
+$('post-mode').addEventListener('click', () => setMode('post'));
+$('reply-mode').addEventListener('click', () => setMode('reply'));
+for (const id of ['character','topic']) $(id).addEventListener('change', changed);
+for (const id of ['draft','post-url']) $(id).addEventListener('input', changed);
+$('confirmed').addEventListener('change', update);
+$('apply').addEventListener('click', () => {
+  if ($('draft').value.trim() && !window.confirm('今の本文をテンプレートで置き換えますか？')) return;
+  $('draft').value = templateText(); changed(); $('draft').focus();
+});
+$('copy').addEventListener('click', copyText);
+$('share').addEventListener('click', async () => {
+  if ($('share').disabled) return;
+  if (typeof navigator.share !== 'function') { await copyText(); return; }
+  const data = {text:$('draft').value};
+  try {
+    if (typeof navigator.canShare === 'function' && !navigator.canShare(data)) { await copyText(); return; }
+    await navigator.share(data);
+    $('status').textContent = '共有操作が終了しました。投稿・返信の完了はX上で確認してください。Xが一覧にない場合は「本文をコピー」を使ってください。';
+  } catch (error) {
+    if (error.name === 'AbortError') $('status').textContent = '共有がキャンセルされたか、共有先が見つかりませんでした。必要なら「本文をコピー」を使ってください。';
+    else { $('status').textContent = '共有できませんでした。「本文をコピー」を押してXに貼り付けてください。'; }
+  }
+});
+$('compose').addEventListener('click', () => {
+  if (mode === 'post' && !$('compose').disabled) openExternal('https://x.com/intent/post?text=' + encodeURIComponent($('draft').value));
+});
+$('open-post').addEventListener('click', () => {
+  const url = parsePostUrl($('post-url').value);
+  if (mode === 'reply' && url) openExternal(url);
+});
+$('delete').addEventListener('click', () => {
+  if (!window.confirm('このアプリに保存した下書きと入力内容を削除しますか？')) return;
+  $('draft').value = ''; $('post-url').value = ''; $('character').value = characters[0]; $('topic').value = topics[0]; mode = 'post';
+  $('confirmed').checked = false; update();
+  try { localStorage.removeItem(STORAGE_KEY); $('save-state').textContent = '保存した下書きを削除しました'; }
+  catch { $('save-state').textContent = '保存データを削除できません。Chromeのサイト設定で削除してください'; }
+  $('status').textContent = '画面の下書きを消去しました。';
+});
+try {
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+  if (saved && typeof saved === 'object') {
+    if (saved.mode === 'reply') mode = 'reply';
+    if (characters.includes(saved.character)) $('character').value = saved.character;
+    if (topics.includes(saved.topic)) $('topic').value = saved.topic;
+    if (typeof saved.text === 'string') $('draft').value = saved.text.slice(0,10000);
+    if (typeof saved.url === 'string') $('post-url').value = saved.url.slice(0,2048);
+    $('save-state').textContent = '端末内の下書きを復元しました';
+  }
+} catch { $('save-state').textContent = '保存データを読み込めません。本文は編集できます'; }
+$('confirmed').checked = false;
+update();
+</script>
+</body>
+</html>
