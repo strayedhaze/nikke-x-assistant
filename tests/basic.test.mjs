@@ -44,7 +44,15 @@ test('NIKKE NOTE: Chromium functional checks',{timeout:60000},async t=>{
     };
     const load=async()=>{
       await send('Page.navigate',{url:origin});
-      for(let i=0;i<100;i++){if(await ev("document.readyState==='complete' && !!document.getElementById('share')"))return;await delay(25);}
+      for(let i=0;i<100;i++){if(await ev("document.readyState==='complete' && !!document.getElementById('share')")){
+        await ev(`window.launchAttempts=[];window.gptOpens=[];window.open=(...args)=>{gptOpens.push(args);};
+          for(const id of gptLaunchIds)$(id).addEventListener('click',event=>{
+            window.lastLaunchTrusted=event.isTrusted;
+            launchAttempts.push({id,blocked:event.defaultPrevented,href:$(id).getAttribute('href'),target:$(id).getAttribute('target')});
+            event.preventDefault(); // Never navigate to external apps or sites in this test harness.
+          });`);
+        return;
+      }await delay(25);}
       throw new Error('Application did not load');
     };
     await send('Network.enable');
@@ -221,12 +229,16 @@ test('NIKKE NOTE: Chromium functional checks',{timeout:60000},async t=>{
         await writeFile(process.env.NIKKE_GPT_SCREENSHOT_PATH,Buffer.from(capture.data,'base64'));
       }
     });
-    await t.test('ChatGPT prompt copy is explicit and opens only the exact homepage',async()=>{
+    await t.test('ChatGPT launch is blocked before copy and native links activate after copy',async()=>{
+      await ev(`$('gpt-open').click();`);
+      assert.equal(await ev('launchAttempts.at(-1).blocked'),true);
+      assert.match(await ev("$('gpt-status').textContent"),/先にプロンプト/);
       await ev("$('gpt-copy').click();");
       assert.equal(await ev('gptCopies[0]'),await ev("$('gpt-prompt').value"));
       assert.equal(await ev('gptOpens.length'),0);
+      assert.equal(await ev('launchAttempts.length'),1); // Copy never initiates navigation.
       await ev("$('gpt-open').click();");
-      assert.deepEqual(await ev('gptOpens[0]'),['https://chatgpt.com/','_blank','noopener,noreferrer']);
+      assert.deepEqual(await ev('launchAttempts.at(-1)'),{id:'gpt-open',blocked:false,href:'https://chatgpt.com/',target:null});
       assert.equal(await ev('gptCopies.length'),1);
     });
     await t.test('ChatGPT copy rejection and absence expose selectable manual text',async()=>{
@@ -234,6 +246,8 @@ test('NIKKE NOTE: Chromium functional checks',{timeout:60000},async t=>{
         await ev(`(async()=>{Object.defineProperty(navigator,'clipboard',{configurable:true,value:${stub}});await copyGptPrompt();})()`);
         assert.equal(await ev("$('gpt-prompt-box').hidden"),false);
         assert.match(await ev("$('gpt-status').textContent"),/長押し/);
+        assert.equal(await ev("$('gpt-open').getAttribute('aria-disabled')"),'true');
+        assert.equal(await ev("$('gpt-manual-copy-box').hidden"),false);
         assert.equal(await ev("$('gpt-prompt').selectionEnd"),await ev("$('gpt-prompt').value.length"));
       }
     });
@@ -279,6 +293,58 @@ test('NIKKE NOTE: Chromium functional checks',{timeout:60000},async t=>{
       assert.equal(await ev("$('gpt-copy').disabled"),true);
       await ev(`$('delete').click();`);
       assert.deepEqual(await ev("[$('gpt-notes').value,$('gpt-answer').value,$('gpt-tone').value]"),['','','natural']);
+      for(const width of [360,412,480]){
+        await send('Emulation.setDeviceMetricsOverride',{width,height:915,deviceScaleFactor:1,mobile:true});
+        assert.equal(await ev('document.documentElement.scrollWidth<=innerWidth'),true);
+      }
+    });
+    await t.test('Android intent targets official package with a fixed safe web fallback',async()=>{
+      await ev(`setMode('post');$('gpt-generate').click();Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async()=>{}}});$('gpt-copy').click();`);
+      const href=await ev("$('gpt-open-app').getAttribute('href')");
+      assert.equal(href,'intent://chatgpt.com/#Intent;scheme=https;package=com.openai.chatgpt;S.browser_fallback_url=https%3A%2F%2Fchatgpt.com%2F;end');
+      assert.equal(decodeURIComponent(href.match(/S.browser_fallback_url=([^;]+)/)[1]),'https://chatgpt.com/');
+      await ev("$('gpt-open-app').click();");
+      assert.equal(await ev('launchAttempts.at(-1).blocked'),false);
+      assert.equal(await ev('launchAttempts.at(-1).target'),null); // Same-tab native intent, no popup.
+      assert.match(await ev("$('gpt-status').textContent"),/起動を試みます/);
+      assert.equal(await ev('gptOpens.length'),0);
+    });
+    await t.test('browser backup stays available after copy and never contains prompt data',async()=>{
+      await send('Emulation.setTouchEmulationEnabled',{enabled:true});
+      const point=await ev("(()=>{$('chatgpt-box').open=true;$('gpt-open-web').scrollIntoView({block:'center'});const r=$('gpt-open-web').getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()");
+      await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[point]});
+      await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+      for(let i=0;i<20;i++){if(await ev("launchAttempts.at(-1)?.id==='gpt-open-web'"))break;await delay(25);}
+      assert.equal(await ev('window.lastLaunchTrusted'),true);
+      assert.deepEqual(await ev('launchAttempts.at(-1)'),{id:'gpt-open-web',blocked:false,href:'https://chatgpt.com/',target:'_blank'});
+      assert.match(await ev("$('gpt-open-web').rel"),/noopener/);
+      assert.match(await ev("$('gpt-open-web').rel"),/noreferrer/);
+      assert.equal(await ev("gptLaunchIds.every(id=>!$(id).href.includes('text=') && !$(id).href.includes('prompt='))"),true);
+    });
+    await t.test('manual copy confirmation enables launch; regeneration, mode and reload clear it',async()=>{
+      await ev(`Object.defineProperty(navigator,'clipboard',{configurable:true,value:undefined});$('gpt-copy').click();`);
+      assert.equal(await ev("$('gpt-open-app').getAttribute('aria-disabled')"),'true');
+      await ev(`$('gpt-manual-copy').checked=true;$('gpt-manual-copy').dispatchEvent(new Event('change'));`);
+      assert.equal(await ev("$('gpt-open-app').getAttribute('aria-disabled')"),'false');
+      await ev(`$('gpt-manual-copy').checked=false;$('gpt-manual-copy').dispatchEvent(new Event('change'));`);
+      assert.equal(await ev("$('gpt-open-app').tabIndex"),-1);
+      await ev(`$('gpt-manual-copy').checked=true;$('gpt-manual-copy').dispatchEvent(new Event('change'));$('gpt-generate').click();`);
+      assert.equal(await ev("$('gpt-open').getAttribute('aria-disabled')"),'true');
+      await ev(`setMode('reply');`);
+      assert.equal(await ev("$('gpt-manual-copy').checked"),false);
+      await load();
+      assert.equal(await ev("gptLaunchIds.every(id=>$(id).getAttribute('aria-disabled')==='true')"),true);
+    });
+    await t.test('late clipboard results cannot enable a changed prompt or trigger navigation',async()=>{
+      for(const success of [true,false]){
+        await ev(`setMode('post');$('gpt-generate').click();window.lateResolve=null;window.lateReject=null;
+          Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:()=>new Promise((resolve,reject)=>{lateResolve=resolve;lateReject=reject;})}});
+          window.pendingGptCopy=copyGptPrompt();$('gpt-notes').value+='更新';$('gpt-notes').dispatchEvent(new Event('input'));$('gpt-generate').click();`);
+        await ev(`(async()=>{${success ? 'lateResolve()' : "lateReject(new Error('late failure'))"};await pendingGptCopy;})()`);
+        assert.equal(await ev("$('gpt-open').getAttribute('aria-disabled')"),'true');
+        assert.equal(await ev("$('gpt-manual-copy-box').hidden"),true);
+      }
+      assert.equal(await ev('gptReadyToOpen'),false);
       for(const width of [360,412,480]){
         await send('Emulation.setDeviceMetricsOverride',{width,height:915,deviceScaleFactor:1,mobile:true});
         assert.equal(await ev('document.documentElement.scrollWidth<=innerWidth'),true);
