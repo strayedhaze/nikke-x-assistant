@@ -11,6 +11,7 @@
     *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,"Noto Sans JP",sans-serif}button,input,select,textarea{font:inherit}button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.42}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:4px}button,input,select,textarea{border:1px solid var(--line);border-radius:12px}button{min-height:48px;padding:10px 16px;background:#26332e;color:var(--text);font-weight:700}a{color:var(--accent);text-underline-offset:4px}header{border-bottom:1px solid var(--line)}.header-inner{max-width:1080px;margin:auto;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-size:19px;font-weight:850;letter-spacing:.13em}.brand span{color:var(--accent)}.local-badge{font-size:12px;color:var(--accent);border:1px solid #607147;padding:4px 10px;border-radius:99px;white-space:nowrap}main{max-width:1080px;margin:auto;padding:40px 24px 24px}.eyebrow{color:var(--accent);font-size:12px;letter-spacing:.14em;font-weight:700}h1{font-size:clamp(27px,5.5vw,40px);line-height:1.4;letter-spacing:.02em;margin:10px 0}h2{font-size:18px;margin:0}.intro{color:var(--muted);margin:10px 0 28px}.layout{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}.panel{border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:24px}.step{color:var(--accent);font:12px/1.5 ui-monospace,monospace;letter-spacing:.12em;display:block;margin-bottom:8px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;border-radius:14px;background:#101817;margin-bottom:24px}.tabs button{border:0;background:transparent;color:var(--muted)}.tabs button[aria-pressed=true]{background:var(--accent);color:var(--ink)}label.field{display:block;font-size:14px;font-weight:700;margin:20px 0 8px}input,select,textarea{width:100%;padding:12px;background:#111b18;color:var(--text);min-height:48px}textarea{min-height:260px;resize:vertical;line-height:1.9}select{appearance:auto}.preview{border-left:2px solid var(--accent);padding:4px 0 4px 16px;margin:20px 0;color:#dce4d7;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}.wide{width:100%}.hint{font-size:13px;color:var(--muted);margin:10px 0}.editor-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.save{font-size:12px;color:var(--muted)}.counts{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:8px 0 0;font-size:12px;color:var(--muted)}.counts strong{font-size:20px;color:var(--text);font-variant-numeric:tabular-nums}.notice{background:#242e22;border:1px solid #4c5e39;border-radius:12px;padding:14px;font-size:13px;margin:20px 0}.check{display:flex;align-items:flex-start;gap:12px;font-size:14px;cursor:pointer}.check input{accent-color:var(--accent);width:22px;height:22px;min-height:22px;flex-shrink:0;margin:4px 0}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}.primary{background:var(--accent);color:var(--ink);border-color:var(--accent)}.actions .primary{grid-column:1/-1}.reply-box{padding:0 0 20px;border-bottom:1px solid var(--line);margin-bottom:20px}.reply-box label{margin-top:0}.reply-box button{margin-top:10px}.error{color:var(--error);font-size:13px;margin:6px 0}.status{min-height:28px;font-size:14px;margin:14px 0 0;color:var(--accent);overflow-wrap:anywhere}.delete{display:block;margin:20px auto 0;background:none;color:var(--muted);border-color:transparent;font-size:13px}.privacy{max-width:1080px;margin:0 auto;padding:16px 24px calc(28px + env(safe-area-inset-bottom));color:var(--muted);font-size:12px}.privacy p{margin:6px 0}[hidden]{display:none!important}@media(max-width:760px){.layout{grid-template-columns:1fr}main{padding:28px 16px 16px}.header-inner{padding:16px}.panel{padding:20px;border-radius:16px}.intro{font-size:14px;margin-bottom:22px}textarea{min-height:250px}.privacy{padding-left:20px;padding-right:20px}.save{max-width:54%;text-align:right}.brand{font-size:16px}}@media(prefers-reduced-motion:no-preference){button{transition:background .15s,opacity .15s}button:not(:disabled):hover{filter:brightness(1.1)}}
     .compact{min-height:100px}.candidate{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:12px}.candidate p,.history-text{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}.candidate button{width:100%}.image-list{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.image-list figure{margin:0;max-width:120px}.image-list img{width:100px;height:100px;object-fit:cover;border-radius:10px}.image-list figcaption{font-size:12px;overflow-wrap:anywhere}.history-item{border-top:1px solid var(--line);padding:16px 0}.history-item button{margin:4px}.history-item time{font-size:12px;color:var(--muted)}
     .chatgpt-box{border:1px solid var(--line);border-radius:14px;padding:16px;margin:20px 0}.chatgpt-box summary{cursor:pointer;font-weight:700;min-height:48px;display:list-item;padding:10px 0}.chatgpt-box button{margin-top:10px}.chatgpt-box textarea{min-height:140px}
+    .launch-link{display:block;text-align:center;min-height:48px;padding:12px 16px;margin-top:10px;border:1px solid var(--line);border-radius:12px;background:#26332e;color:var(--text);font-weight:700;text-decoration:none;overflow-wrap:anywhere}.launch-link.primary{background:var(--accent);color:var(--ink)}.launch-link[aria-disabled="true"]{opacity:.42;cursor:not-allowed}
   </style>
 </head>
 <body>
@@ -58,7 +59,7 @@
       </div>
       <details class="chatgpt-box" id="chatgpt-box">
         <summary>ChatGPT連携（手動でコピー・貼り付け）</summary>
-        <p class="hint">①条件を入力してプロンプト作成 → ②コピー → ③ChatGPTを開き、自分で貼り付け・送信 → ④回答をこちらへ貼り付け。APIや自動送信は使いません。</p>
+        <p class="hint">①条件を入力してプロンプト作成 → ②コピー → ③対応リンクでアプリを開き、自分で貼り付け・送信 → ④回答をこちらへ貼り付け。APIや自動送信は使いません。</p>
         <p class="hint">キャラクター・話題は「話題を選ぶ」の入力を使用します。個人情報や他人の非公開情報を含めないでください。</p>
         <label class="field" for="gpt-notes">補足情報（事実・伝えたいこと）</label>
         <textarea id="gpt-notes" class="compact" maxlength="2000" placeholder="例：今日はスキルを1段階育成。次の目標を短く書きたい"></textarea>
@@ -74,9 +75,15 @@
           <label class="field" for="gpt-prompt">ChatGPTに貼り付けるプロンプト（手動コピーも可）</label>
           <textarea id="gpt-prompt" readonly spellcheck="false" aria-describedby="gpt-status"></textarea>
           <button type="button" id="gpt-copy" class="wide" disabled>プロンプトをコピー</button>
+          <label id="gpt-manual-copy-box" class="check" style="margin-top:12px" hidden><input type="checkbox" id="gpt-manual-copy"><span>プロンプトを手動でコピーしました</span></label>
         </div>
-        <button type="button" id="gpt-open" class="wide">ChatGPTを開く ↗</button>
-        <p class="hint">ChatGPTは別のサービスです。このボタンはトップページを開くだけで、入力内容は渡しません。送信内容・ログイン・利用条件はChatGPT上で自分で確認してください。</p>
+        <p class="hint" id="gpt-launch-help">先にプロンプトをコピーすると、起動ボタンが使えます。まず対応リンクを試し、Chromeに留まる場合は「アプリを指定して開く」をタップしてください。</p>
+        <a id="gpt-open" class="launch-link primary" href="https://chatgpt.com/" aria-disabled="true" tabindex="-1" rel="noreferrer" aria-describedby="gpt-launch-help">ChatGPTを開く（対応リンク） ↗</a>
+        <a id="gpt-open-app" class="launch-link" href="intent://chatgpt.com/#Intent;scheme=https;package=com.openai.chatgpt;S.browser_fallback_url=https%3A%2F%2Fchatgpt.com%2F;end" aria-disabled="true" tabindex="-1" rel="noreferrer" aria-describedby="gpt-app-help">ChatGPTアプリを指定して開く</a>
+        <p class="hint" id="gpt-app-help">Android Chrome用。公式アプリが未インストール・起動不可の場合はWeb版へ移ることがあります。起動できない場合は下のWeb版を使ってください。</p>
+        <a id="gpt-open-web" class="launch-link" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" aria-disabled="true" tabindex="-1">予備：ブラウザ版ChatGPTを開く ↗</a>
+        <p class="hint">起動先はAndroidの「対応リンクを開く」やChrome・vivoの設定に依存し、アプリ起動は保証できません。Web版リンクまでアプリに切り替わる場合は、リンクを長押しして新しいタブで開いてください。</p>
+        <p class="hint">ChatGPTは別のサービスです。開くのはトップページだけで、プロンプトや画像は渡しません。貼り付け・送信とログインはChatGPT上で自分で行ってください。</p>
         <label class="field" for="gpt-answer">ChatGPTの回答を貼り付ける</label>
         <textarea id="gpt-answer" maxlength="10000" placeholder="使いたい文章を手動でコピーし、ここへ貼り付け"></textarea>
         <button type="button" id="gpt-apply" class="wide" disabled>本文に反映</button>
@@ -149,8 +156,20 @@ function templateText() {
   return templates[mode][$('topic').value](name);
 }
 // ChatGPT assistance only prepares local text. Never sends data to ChatGPT.
+let gptReadyToOpen = false;
+let gptCopyRevision = 0;
+const gptLaunchIds = ['gpt-open', 'gpt-open-app', 'gpt-open-web'];
 const gptTones = {natural:'自然でシンプル', polite:'丁寧で落ち着いた感じ', friendly:'親しみやすく、なれなれしすぎない'};
+function setGptLaunchReady(ready) {
+  gptReadyToOpen = ready;
+  for (const id of gptLaunchIds) {
+    $(id).setAttribute('aria-disabled', String(!ready));
+    $(id).tabIndex = ready ? 0 : -1;
+  }
+}
 function resetGptPrompt() {
+  ++gptCopyRevision; setGptLaunchReady(false);
+  $('gpt-manual-copy').checked = false; $('gpt-manual-copy-box').hidden = true;
   $('gpt-prompt').value = ''; $('gpt-prompt-box').hidden = true; $('gpt-copy').disabled = true;
   $('gpt-status').textContent = '';
 }
@@ -187,14 +206,21 @@ function generateGptPrompt() {
 }
 async function copyGptPrompt() {
   if (!$('gpt-prompt').value || $('gpt-copy').disabled) return;
+  const revision = ++gptCopyRevision;
+  setGptLaunchReady(false);
+  $('gpt-manual-copy').checked = false; $('gpt-manual-copy-box').hidden = true;
   try {
     if (typeof navigator.clipboard?.writeText !== 'function') throw new Error('Clipboard unavailable');
     await navigator.clipboard.writeText($('gpt-prompt').value);
-    $('gpt-status').textContent = 'プロンプトをコピーしました。「ChatGPTを開く」から自分で貼り付け・送信してください。';
+    if (revision !== gptCopyRevision) return;
+    setGptLaunchReady(true);
+    $('gpt-status').textContent = 'プロンプトをコピーしました。次に対応リンク、またはアプリを指定するボタンをタップし、自分で貼り付け・送信してください。';
   } catch {
+    if (revision !== gptCopyRevision) return;
+    $('gpt-manual-copy-box').hidden = false;
     $('gpt-prompt-box').hidden = false; $('gpt-prompt').focus(); $('gpt-prompt').select();
     $('gpt-prompt').setSelectionRange(0,$('gpt-prompt').value.length);
-    $('gpt-status').textContent = 'コピーできませんでした。上のプロンプト欄を長押しし、「すべて選択」→「コピー」で手動コピーしてください。';
+    $('gpt-status').textContent = 'コピーできませんでした。上のプロンプト欄を長押しし、「すべて選択」→「コピー」で手動コピーし、「手動でコピーしました」にチェックを付けてください。';
   }
 }
 function applyGptAnswer() {
@@ -385,9 +411,23 @@ $('save-history').addEventListener('click', saveHistory);
 $('new-history').addEventListener('click', () => { editingHistoryId = null; renderHistory(); $('history-status').textContent = '次の保存では別の履歴として追加します。'; });
 $('gpt-generate').addEventListener('click', generateGptPrompt);
 $('gpt-copy').addEventListener('click', copyGptPrompt);
-$('gpt-open').addEventListener('click', () => {
-  window.open('https://chatgpt.com/', '_blank', 'noopener,noreferrer');
-  $('gpt-status').textContent = 'ChatGPTを別タブで開きます。開かない場合はChromeのポップアップ設定を確認してください。プロンプトは自分で貼り付け・送信してください。';
+$('gpt-manual-copy').addEventListener('change', () => {
+  ++gptCopyRevision;
+  setGptLaunchReady(Boolean($('gpt-prompt').value) && $('gpt-manual-copy').checked);
+});
+// Native anchors keep Android link/intent handling inside the user's tap.
+// No timer, asynchronous redirect, installed-app detection, or automatic paste.
+for (const id of gptLaunchIds) $(id).addEventListener('click', event => {
+  if (!gptReadyToOpen) {
+    event.preventDefault();
+    $('gpt-status').textContent = '先にプロンプトをコピーしてください。コピーできない場合は手動コピーを使えます。'; return;
+  }
+  const messages = {
+    'gpt-open':'対応リンクでChatGPTを開きます。Chromeに留まる場合は、戻って「ChatGPTアプリを指定して開く」を試してください。',
+    'gpt-open-app':'公式ChatGPTアプリの起動を試みます。開かない場合はWeb版の予備ボタンを使ってください。',
+    'gpt-open-web':'ブラウザ版を別タブで開きます。アプリが開く場合はリンクを長押しして新しいタブで開いてください。'
+  };
+  $('gpt-status').textContent = messages[id] + ' プロンプトは自分で貼り付け・送信してください。';
 });
 $('gpt-apply').addEventListener('click', applyGptAnswer);
 for (const id of ['character','topic','gpt-tone']) $(id).addEventListener('change', resetGptPrompt);
