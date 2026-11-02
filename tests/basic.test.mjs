@@ -16,6 +16,7 @@ test('NIKKE NOTE: Chromium functional checks',{timeout:60000},async t=>{
   const browser=spawn(process.env.CHROMIUM_PATH||'chromium',['--headless','--no-sandbox','--disable-dev-shm-usage','--no-first-run','--remote-debugging-port=0',`--user-data-dir=${profile}`,'about:blank'],{stdio:['ignore','ignore','pipe']});
   let stderr='',socket,seq=0;
   const pending=new Map();
+  const pageRequests=[];
   browser.stderr.on('data',data=>{stderr+=data;});
   try {
     let port;
@@ -30,6 +31,7 @@ test('NIKKE NOTE: Chromium functional checks',{timeout:60000},async t=>{
     await new Promise((resolve,reject)=>{socket.onopen=resolve;socket.onerror=reject;});
     socket.onmessage=event=>{
       const m=JSON.parse(event.data),p=pending.get(m.id);
+      if(m.method==='Network.requestWillBeSent')pageRequests.push(m.params.request.url);
       if(p){pending.delete(m.id);clearTimeout(p.timer);m.error?p.reject(new Error(JSON.stringify(m.error))):p.resolve(m.result);}
     };
     const send=(method,params={})=>new Promise((resolve,reject)=>{
@@ -45,6 +47,7 @@ test('NIKKE NOTE: Chromium functional checks',{timeout:60000},async t=>{
       for(let i=0;i<100;i++){if(await ev("document.readyState==='complete' && !!document.getElementById('share')"))return;await delay(25);}
       throw new Error('Application did not load');
     };
+    await send('Network.enable');
     await send('Emulation.setDeviceMetricsOverride',{width:412,height:915,deviceScaleFactor:1,mobile:true});
     await load();
     if(process.env.NIKKE_SCREENSHOT_PATH){
@@ -201,6 +204,89 @@ test('NIKKE NOTE: Chromium functional checks',{timeout:60000},async t=>{
         await send('Emulation.setDeviceMetricsOverride',{width,height:915,deviceScaleFactor:1,mobile:true});
         assert.equal(await ev('document.documentElement.scrollWidth<=innerWidth'),true);
       }
+    });
+    await t.test('ChatGPT post prompt contains local context and anti-fabrication guidance',async()=>{
+      await ev(`restore({});setMode('post');$('chatgpt-box').open=true;window.gptCopies=[];window.gptOpens=[];
+        Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async text=>{gptCopies.push(text);}}});
+        window.open=(...args)=>{gptOpens.push(args);};
+        $('custom-character').value='紅蓮';$('free-topic').value='今日の育成';$('gpt-notes').value='スキルを1段階上げた';$('gpt-tone').value='polite';$('gpt-generate').click();`);
+      const prompt=await ev("$('gpt-prompt').value");
+      for(const content of ['紅蓮','今日の育成','スキルを1段階上げた','丁寧で落ち着いた感じ','自然でシンプル','過度な絵文字','ハッシュタグ','宣伝調','未確認のゲーム情報','創作しない'])assert.ok(prompt.includes(content),content);
+      assert.deepEqual(await ev('[gptCopies.length,gptOpens.length]'),[0,0]);
+      assert.equal(await ev("$('gpt-generate').textContent"),'ChatGPTで投稿文を作成');
+      assert.equal(await ev("$('gpt-prompt-box').hidden"),false);
+      if(process.env.NIKKE_GPT_SCREENSHOT_PATH){
+        const clip=await ev("(()=>{const r=$('chatgpt-box').getBoundingClientRect();return {x:r.x+scrollX,y:r.y+scrollY,width:r.width,height:r.height,scale:1};})()");
+        const capture=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:true,clip});
+        await writeFile(process.env.NIKKE_GPT_SCREENSHOT_PATH,Buffer.from(capture.data,'base64'));
+      }
+    });
+    await t.test('ChatGPT prompt copy is explicit and opens only the exact homepage',async()=>{
+      await ev("$('gpt-copy').click();");
+      assert.equal(await ev('gptCopies[0]'),await ev("$('gpt-prompt').value"));
+      assert.equal(await ev('gptOpens.length'),0);
+      await ev("$('gpt-open').click();");
+      assert.deepEqual(await ev('gptOpens[0]'),['https://chatgpt.com/','_blank','noopener,noreferrer']);
+      assert.equal(await ev('gptCopies.length'),1);
+    });
+    await t.test('ChatGPT copy rejection and absence expose selectable manual text',async()=>{
+      for(const stub of ["{writeText:async()=>{throw new Error('denied');}}",'undefined']){
+        await ev(`(async()=>{Object.defineProperty(navigator,'clipboard',{configurable:true,value:${stub}});await copyGptPrompt();})()`);
+        assert.equal(await ev("$('gpt-prompt-box').hidden"),false);
+        assert.match(await ev("$('gpt-status').textContent"),/長押し/);
+        assert.equal(await ev("$('gpt-prompt').selectionEnd"),await ev("$('gpt-prompt').value.length"));
+      }
+    });
+    await t.test('ChatGPT reply requires source and purpose, uses requested tone, and excludes URL',async()=>{
+      await ev(`setMode('reply');$('gpt-generate').click();`);
+      assert.equal(await ev("$('gpt-prompt').value"),'');
+      assert.match(await ev("$('gpt-status').textContent"),/本文と返信目的/);
+      await ev(`$('source-text').value='スノーホワイトで挑戦中';$('gpt-purpose').value='編成について質問';$('gpt-tone').value='friendly';$('post-url').value='https://x.com/user/status/987';$('gpt-generate').click();`);
+      const prompt=await ev("$('gpt-prompt').value");
+      for(const content of ['返信案を3種類','スノーホワイトで挑戦中','編成について質問','親しみやすく'])assert.ok(prompt.includes(content));
+      assert.ok(!prompt.includes('https://x.com/'));
+      assert.equal(await ev("$('gpt-generate').textContent"),'ChatGPTで返信案を作成');
+      assert.equal(await ev("$('gpt-reply-fields').hidden"),false);
+    });
+    await t.test('prompt inputs invalidate old prompt; mode and history restore clear it',async()=>{
+      for(const [id,event] of [['gpt-notes','input'],['gpt-purpose','input'],['source-text','input'],['free-topic','input'],['custom-character','input'],['character','change'],['topic','change'],['gpt-tone','change']]){
+        await ev(`$('gpt-generate').click();$('${id}').dispatchEvent(new Event('${event}'));`);
+        assert.equal(await ev("$('gpt-copy').disabled && $('gpt-prompt-box').hidden"),true,id);
+      }
+      await ev(`$('gpt-generate').click();setMode('post');`);
+      assert.equal(await ev("$('gpt-prompt').value"),'');
+    });
+    await t.test('pasted answer requires explicit apply, preserves images, resets consent and saves',async()=>{
+      await ev(`window.confirm=()=>true;selectImages([new File(['png'],'answer.png',{type:'image/png'})]);$('draft').value='元の本文';$('confirmed').checked=true;update();$('gpt-answer').value='育成を少し進めました。';$('gpt-answer').dispatchEvent(new Event('input'));`);
+      assert.equal(await ev("$('draft').value"),'元の本文');
+      assert.equal(await ev("$('confirmed').checked"),true);
+      await ev("$('gpt-apply').click();");
+      assert.deepEqual(await ev("[$('draft').value,$('confirmed').checked,$('share').disabled,selectedImages.length]"),['育成を少し進めました。',false,true,1]);
+      assert.equal(await ev("JSON.parse(localStorage.getItem(STORAGE_KEY)).text"),'育成を少し進めました。');
+      await ev(`$('confirmed').checked=true;update();window.confirm=()=>false;$('gpt-answer').value='置換キャンセル';$('gpt-apply').click();`);
+      assert.deepEqual(await ev("[$('draft').value,$('confirmed').checked]"),['育成を少し進めました。',true]);
+      await ev(`$('gpt-answer').value='';$('gpt-answer').dispatchEvent(new Event('input'));`);
+      assert.equal(await ev("$('gpt-apply').disabled"),true);
+      await ev(`$('gpt-answer').value='a'.repeat(10001);applyGptAnswer();`);
+      assert.match(await ev("$('gpt-status').textContent"),/10,000/);
+    });
+    await t.test('ChatGPT fields survive reload and history; legacy defaults and deletion stay safe',async()=>{
+      await ev(`window.confirm=()=>true;$('gpt-answer').value='保存する回答';$('gpt-answer').dispatchEvent(new Event('input'));save();`);
+      await load();
+      assert.deepEqual(await ev("[$('gpt-notes').value,$('gpt-purpose').value,$('gpt-tone').value,$('gpt-answer').value,$('confirmed').checked]"),['スキルを1段階上げた','編成について質問','friendly','保存する回答',false]);
+      await ev(`window.confirm=()=>true;$('new-history').click();$('save-history').click();$('gpt-notes').value='別の情報';$('history-list').querySelector('button').click();`);
+      assert.equal(await ev("$('gpt-notes').value"),'スキルを1段階上げた');
+      assert.equal(await ev("$('gpt-copy').disabled"),true);
+      await ev(`$('delete').click();`);
+      assert.deepEqual(await ev("[$('gpt-notes').value,$('gpt-answer').value,$('gpt-tone').value]"),['','','natural']);
+      for(const width of [360,412,480]){
+        await send('Emulation.setDeviceMetricsOverride',{width,height:915,deviceScaleFactor:1,mobile:true});
+        assert.equal(await ev('document.documentElement.scrollWidth<=innerWidth'),true);
+      }
+    });
+    await t.test('no automatic external page requests during editing and ChatGPT preparation',async()=>{
+      assert.ok(pageRequests.length>0);
+      assert.deepEqual(pageRequests.filter(url=>/^https?:/.test(url) && !url.startsWith(origin+'/')),[]);
     });
     await t.test('malformed storage does not break startup',async()=>{
       await ev("localStorage.setItem(STORAGE_KEY,'{broken')");await load();
